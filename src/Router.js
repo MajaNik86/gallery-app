@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import useAuth from "./hooks/useAuth";
 import Galleries from "./pages/Galleries";
+import MyGalleriesPage from "./pages/MyGalleriesPage";
 
 export default function Router() {
 
@@ -13,17 +14,20 @@ export default function Router() {
     }
     const GuestRoute = ({ children, ...rest }) => {
         const { user } = useAuth();
-        return <Route {...rest}>{user.first_name ? <Redirect to='/galleries' /> : children}</Route>
+        return <Route {...rest}>{user.first_name ? <Redirect to='/my-galleries' /> : children}</Route>
     }
     return <Switch>
+        <GuestRoute path='/' exact>
+            <Galleries />
+        </GuestRoute>
         <GuestRoute path='/login' exact>
             <LoginPage />
         </GuestRoute>
         <GuestRoute path='/register' exact>
             <RegisterPage />
         </GuestRoute>
-        <AuthRoute path='/galleries' exact>
-            <Galleries />
+        <AuthRoute path='/my-galleries' exact>
+            <MyGalleriesPage />
         </AuthRoute>
     </Switch>
 }

@@ -11,7 +11,7 @@ const MainNavigation = (props) => {
     const token = localStorage.getItem("token");
 
     const handleLogout = async () => {
-        await authService.logout();
+        await logout();
         window.location='/login';
     };
  
@@ -19,9 +19,20 @@ const MainNavigation = (props) => {
     return <header >
         <nav>
             <ul>
+                <h4>Galleries: </h4>
+           
+                    <li>
+                        <Link to="/galleries"> All Galleries</Link>
+                    </li>
+             
                 {!user.email && (
                     <li>
                         <Link to="/login">Login</Link>
+                    </li>
+                )}
+                {user.email && (
+                    <li>
+                        <Link to="/my-galleries">My galleries</Link>
                     </li>
                 )}
                 {!user.email && (
@@ -29,11 +40,7 @@ const MainNavigation = (props) => {
                         <Link to="/register">Register</Link>
                     </li>
                 )}
-                   {user.email && (
-                    <li>
-                        <Link to="/galleries">Galleries</Link>
-                    </li>
-                )}
+                   
             
                 {user.email && <li>
                     <button onClick={handleLogout}>Logout</button>

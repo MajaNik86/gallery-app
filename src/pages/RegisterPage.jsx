@@ -4,11 +4,17 @@ import { useHistory } from "react-router-dom";
 import { authService } from "../services/AuthService";
 
 export default function Register() {
-    const [newUser, setNewUser] = useState({ first_name: '',last_name:'', email: '', password: '',confirm_password:'' });
+    const [newUser, setNewUser] = useState({ first_name: '',last_name:'', email: '', password: '',password_confirmation:''});
+    console.log(newUser)
     const history = useHistory();
+   
 
+  
     const handleOnRegister = async (e) => {
         e.preventDefault();
+        if (newUser.password !== newUser.password_confirmation) {
+            alert('password not matching')
+        }
         const response = await authService.register(newUser);
         if (response) {
             alert('Registration successful.');

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 
 
@@ -7,30 +7,10 @@ export default function RegisterComponent({
     newUser,
     setNewUser,
 }) {
-    const [confirmPassword, setConfirmPassword] = useState({ password: "" });
-    const [passwordConfirmed, setPasswordConfirmed] = useState(false);
-
-    useEffect(() => {
-        checkPasswords();
-    }, [confirmPassword]);
-
-    const checkPasswords = () => {
-        if (confirmPassword === newUser.password) {
-            setPasswordConfirmed(true);
-        }
-    };
-
-
-    const handleUnmatchedPasswords = (e) => {
-        e.preventDefault()
-        alert('Passwords do not match');
-    };
 
     return (
         <div>
-            <form  onSubmit={
-                passwordConfirmed ? handleOnRegister : handleUnmatchedPasswords
-            }>
+            <form  onSubmit={handleOnRegister}>
                 <label htmlFor="name">First Name:</label>
                 <input 
                     required
@@ -65,11 +45,16 @@ export default function RegisterComponent({
                 <input 
                     required
                     type="password"
-                    value={confirmPassword.confirmPassword}
+                    value={newUser.password_confirmation}
                     onChange={({ target }) =>
-                        setConfirmPassword(target.value)
+                        setNewUser({...newUser,password_confirmation: target.value})
                     }
                 />
+                <label>I accept terms and conditions</label>
+                <input
+            required
+            type="checkbox"
+          />
                 <button type="submit">Register</button>
             </form>
         </div>

@@ -1,5 +1,6 @@
 import { httpService } from "./HttpService";
 
+
 class AuthService {
 
     constructor() {
@@ -20,6 +21,7 @@ class AuthService {
     }
     async register(data) {
         try {
+            console.log('a ovde?')
             let response = await this.axiosInstance.post("/register", data);
             console.log(response);
             if (response.data.status === "success") {
@@ -32,6 +34,16 @@ class AuthService {
         }
     }
 
+    // async login(data) {
+    //     let response = await httpService.axiosObj
+    //         .post("/login", data)
+    //         .catch((error) => LoginErrors(error));
+    //     if (response.data) {
+    //         localStorage.setItem("token", response.data.authorisation.token);
+    //         this.setAxiosAuthorizationHeader(response.data.authorisation.token);
+    //         return response;
+    //     }
+    // }
     async login(data) {
 
         try {
@@ -41,7 +53,7 @@ class AuthService {
                 this.setAxiosAuthorizationHeader(response.data.authorization.token);
                 return response.data
             }
-        } catch (error) { }
+        } catch (error) { alert("Credentials don't matach") }
     }
 
 
@@ -55,7 +67,7 @@ class AuthService {
 
     async refresh() {
         try {
-            const response = await this.axiosInstance.post("/refresh");
+            let response = await this.axiosInstance.post("/refresh");
 
             if (response.data) {
                 localStorage.setItem("token", response.data.authorization.token);

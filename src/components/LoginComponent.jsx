@@ -20,7 +20,7 @@ export default function LoginComponent({ handleOnLogin, newUser, setNewUser }){
                         setNewUser({ ...newUser, password: target.value })
                     }
                 />
-                <button type="submit">login</button>
+                <button type="submit">Log In</button>
             </form>
         </div>
     );
