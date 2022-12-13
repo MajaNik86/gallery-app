@@ -1,85 +1,33 @@
-import { httpService } from "./HttpService";
+import HttpService from "./HttpService";
+
+class AuthService extends HttpService {
 
 
-class AuthService {
+    login = async (credentials) => {
+        const response = await this.client.post("/login", credentials);
+        localStorage.setItem("token", response.data.authorization.token);
+        return response.data
+    };
 
-    constructor() {
-        this.axiosInstance = httpService.axiosInstance;
-        this.setAxiosAuthorizationHeader();
-    }
+    logout = async () => {
+        await this.client.post("/logout");
+        localStorage.removeItem("token");
+    };
 
-    setAxiosAuthorizationHeader(tokenParam = null) {
-        try {
-            let token = tokenParam ? tokenParam : localStorage.getItem("token");
+    register = async (user) => {
+        const response = await this.client.post("/register", user);
+        localStorage.setItem("token", response.data.authorization.token);
+        return response.data
 
-            if (token) {
-                this.axiosInstance.defaults.headers.common[
-                    "Authorization"
-                ] = `Bearer ${token}`;
-            }
-        } catch (error) { }
-    }
-    async register(data) {
-        try {
-            console.log('a ovde?')
-            let response = await this.axiosInstance.post("/register", data);
-            console.log(response);
-            if (response.data.status === "success") {
-                localStorage.setItem("token", response.data.authorization.token);
-                this.setAxiosAuthorizationHeader(response.data.authorization.token);
-                return response.data;
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    };
 
-    // async login(data) {
-    //     let response = await httpService.axiosObj
-    //         .post("/login", data)
-    //         .catch((error) => LoginErrors(error));
-    //     if (response.data) {
-    //         localStorage.setItem("token", response.data.authorisation.token);
-    //         this.setAxiosAuthorizationHeader(response.data.authorisation.token);
-    //         return response;
-    //     }
-    // }
-    async login(data) {
-
-        try {
-            let response = await this.axiosInstance.post("/login", data);
-            if (response.data) {
-                localStorage.setItem("token", response.data.authorization.token);
-                this.setAxiosAuthorizationHeader(response.data.authorization.token);
-                return response.data
-            }
-        } catch (error) { alert("Credentials don't matach") }
-    }
+    getActiveUser = async () => {
+        const response = await this.client.get("/me");
+        return response.data;
+    };
 
 
-    async logout() {
-        let response = await this.axiosInstance.post("./logout");
-        if (response.data) {
-            localStorage.removeItem("token");
-            return response.data;
-        }
-    }
-
-    async refresh() {
-        try {
-            let response = await this.axiosInstance.post("/refresh");
-
-            if (response.data) {
-                localStorage.setItem("token", response.data.authorization.token);
-                this.setAxiosAuthorizationHeader(response.data.authorization.token);
-                return response.data;
-
-            }
-            throw new Error('No response.data');
-        } catch (error) {
-            console.error(error);
-        }
-    }
 }
 
-export const authService = new AuthService();
+const authService = new AuthService();
+export default authService;

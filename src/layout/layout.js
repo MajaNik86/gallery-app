@@ -1,14 +1,14 @@
 import React from "react";
 import MainNavigation from "./MainNavigation";
 import { Fragment } from "react";
-import useAuth from "../hooks/useAuth";
+import Footer from "./Footer";
 
 const Layout = ({ children }) => {
-    const { user } = useAuth();
+
     return <Fragment>
         <MainNavigation />
         <main>{children}</main>
-        <footer> Hello there{user && user.first_name}</footer>
+        <Footer />
     </Fragment>
 }
 

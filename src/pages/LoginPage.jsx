@@ -1,23 +1,27 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import LoginComponent from "../components/LoginComponent";
-import useAuth from "../hooks/useAuth";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../store/auth/slice";
+import LoginComponent from '../components/LoginComponent'
+import { useHistory } from "react-router-dom";
 
-export default function LoginPage(){
-    const [newUser, setNewUser] = useState({ email: '', password: '' });
-    const { user, login } = useAuth();
-
+export default function Login(){
+    const dispatch = useDispatch();
     const history = useHistory();
-    const handleSubmitForm = async (e) => {
+    const [credentials, setCredentials] = useState({
+        email: "",
+        password: ""
+    });
+
+    function handleOnLogin(e) {
         e.preventDefault();
-        await login(newUser);
-        console.log('login successfull');
-        history.push('/galleries');
-      };
+        dispatch(login(credentials));
+        console.log('Success!');
+        history.push('/galleries')
+    }
+
 
     return <LoginComponent
-        handleOnLogin={handleSubmitForm}
-        newUser={newUser}
-        setNewUser={setNewUser} />;
+        handleOnLogin={handleOnLogin}
+        credentials={credentials}
+        setCredentials={setCredentials} />;
 }
